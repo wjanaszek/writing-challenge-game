@@ -1,7 +1,12 @@
+import { getSentences } from "@/app/actions/get-sentences";
 import { initStorageSchema } from "@/app/actions/init-storage-schema";
 import { seedSentences } from "@/app/actions/seed-sentences";
-import SentenceToWrite from "@/components/sentence-to-write";
 import Timer from "@/components/timer";
+import dynamic from "next/dynamic";
+
+const GameWrapper = dynamic(() => import("../components/game-wrapper"), {
+  ssr: false,
+});
 
 export default async function Home() {
   await initStorageSchema();
@@ -9,7 +14,7 @@ export default async function Home() {
 
   return (
     <div>
-      <SentenceToWrite />
+      <GameWrapper sentences={await getSentences()}></GameWrapper>
       <Timer />
     </div>
   );

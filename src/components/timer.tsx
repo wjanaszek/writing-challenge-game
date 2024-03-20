@@ -1,7 +1,7 @@
 "use client";
+import { ROUND_DURATION_IN_MS } from '@/common/constants';
 import { useEffect, useState } from "react";
 
-const ROUND_DURATION_IN_MS = 15 * 1000;
 const ONE_SECOND_IN_MS = 1000;
 
 export default function Timer() {
