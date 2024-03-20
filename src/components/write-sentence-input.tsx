@@ -46,7 +46,7 @@ export default function WriteSentenceInput({
 
     // TODO proper counting
     const wordsPerMinute = 23;
-    const accuracy = 0.7;
+    const accuracy = 16;
 
     const playerStats = await onSubmit(
       activePlayerData.id,

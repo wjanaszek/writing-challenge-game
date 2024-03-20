@@ -1,8 +1,7 @@
 "use client";
 
-import { submitSentence } from "@/app/actions/submit-sentence";
 import { ACTIVE_PLAYER_STORAGE_KEY } from "@/common/constants";
-import { ActivePlayer } from "@/common/types";
+import { ActivePlayer, PlayerStats } from "@/common/types";
 import ActiveSentenceLogic from "@/components/active-sentence-logic";
 import Player from "@/components/player";
 import WriteSentenceInput from "@/components/write-sentence-input";
@@ -46,6 +45,20 @@ export default function GameWrapper({ sentences }: { sentences: string[] }) {
     setActivePlayer(activePlayerData);
 
     return activePlayerData;
+  };
+
+  const submitSentence = async (
+    playerId: string,
+    wordsPerMinute: number,
+    accuracy: number,
+  ): Promise<PlayerStats> => {
+    const response = await fetch("/api/sentence", {
+      method: "POST",
+      body: JSON.stringify({ playerId, wordsPerMinute, accuracy }),
+      cache: "no-store",
+    });
+
+    return response.json();
   };
 
   return (

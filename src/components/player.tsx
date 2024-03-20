@@ -1,4 +1,5 @@
 "use client";
+
 import { ACTIVE_PLAYER_STORAGE_KEY } from "@/common/constants";
 import { ActivePlayer } from "@/common/types";
 import { useEffect, useState } from "react";
@@ -61,7 +62,7 @@ export default function Player({
       {!!activePlayer ? (
         <>
           <span>Playing as: {activePlayer.name}</span>
-          <button type="button" onClick={handleLogOut}>
+          <button className={"px-4"} type="button" onClick={handleLogOut}>
             Log out
           </button>
         </>
