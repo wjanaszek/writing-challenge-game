@@ -63,6 +63,7 @@ export default function WriteSentenceInput({
         value={sentence}
         onChange={handleChange}
         placeholder="Write the sentence"
+        className={"mr-4"}
       />
       <button type="submit">Submit</button>
     </form>
