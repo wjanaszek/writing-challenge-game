@@ -1,8 +1,7 @@
 "use client";
+import { ACTIVE_PLAYER_STORAGE_KEY } from "@/common/constants";
 import { ActivePlayer } from "@/common/types";
 import { useEffect, useState } from "react";
-
-const ACTIVE_PLAYER_STORAGE_KEY = "active-player-id";
 
 export default function Player({
   onJoinGame,
@@ -29,12 +28,14 @@ export default function Player({
       JSON.stringify(activePlayerData),
     );
     setActivePlayer(activePlayerData);
+    setName("");
     // TODO add some snackbar that user has logged in
   };
 
   const handleLogOut = (): void => {
     sessionStorage.removeItem(ACTIVE_PLAYER_STORAGE_KEY);
     setActivePlayer(null);
+    setName("");
   };
 
   useEffect(() => {

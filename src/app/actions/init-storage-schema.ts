@@ -12,4 +12,11 @@ export async function initStorageSchema(): Promise<void> {
      words_per_minute integer NOT NULL default 0,
      accuracy integer NOT NULL default 0
   )`;
+
+  await sql`CREATE TABLE IF NOT EXISTS players_sentences (
+     id uuid PRIMARY KEY,
+     player_id uuid NOT NULL,
+     words_per_minute integer NOT NULL,
+     accuracy integer NOT NULL
+  )`;
 }

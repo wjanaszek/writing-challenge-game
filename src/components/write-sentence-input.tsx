@@ -1,16 +1,24 @@
 "use client";
 
+import { ACTIVE_PLAYER_STORAGE_KEY } from "@/common/constants";
 import { PubSubChannels } from "@/common/pub-sub";
+import { PlayerStats } from "@/common/types";
 import { useChannel } from "ably/react";
 import { useEffect, useState } from "react";
 
 export default function WriteSentenceInput({
   onSubmit,
 }: {
-  onSubmit: (sentence: string) => Promise<void>;
+  onSubmit: (
+    userId: string,
+    wordsPerMinute: number,
+    accuracy: number,
+  ) => Promise<PlayerStats>;
 }) {
+  const [activeSentence, setActiveSentence] = useState<string>("");
   const [sentence, setSentence] = useState<string>("");
   const { channel } = useChannel(PubSubChannels.SENTENCES, ({ data }) => {
+    setActiveSentence(data.activeSentence);
     setSentence("");
   });
 
@@ -25,8 +33,27 @@ export default function WriteSentenceInput({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await onSubmit(sentence);
-    // TODO add some snackbar that user has logged in
+    // TODO move that to hook
+    const rawActivePlayerDataRaw = sessionStorage.getItem(
+      ACTIVE_PLAYER_STORAGE_KEY,
+    );
+
+    if (!rawActivePlayerDataRaw) {
+      return;
+    }
+
+    const activePlayerData = JSON.parse(rawActivePlayerDataRaw);
+
+    // TODO proper counting
+    const wordsPerMinute = 23;
+    const accuracy = 0.7;
+
+    const playerStats = await onSubmit(
+      activePlayerData.id,
+      wordsPerMinute,
+      accuracy,
+    );
+    await channel.publish(PubSubChannels.PLAYERS, playerStats);
   };
 
   return (
