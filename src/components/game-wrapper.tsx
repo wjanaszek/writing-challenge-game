@@ -3,6 +3,7 @@
 import { ACTIVE_PLAYER_STORAGE_KEY } from "@/common/constants";
 import { ActivePlayer, PlayerStats } from "@/common/types";
 import ActiveSentenceLogic from "@/components/active-sentence-logic";
+import Leaderboard from "@/components/leaderboard";
 import Player from "@/components/player";
 import WriteSentenceInput from "@/components/write-sentence-input";
 import * as Ably from "ably";
@@ -66,6 +67,7 @@ export default function GameWrapper({ sentences }: { sentences: string[] }) {
       <ActiveSentenceLogic sentences={sentences} />
       {activePlayer && <WriteSentenceInput onSubmit={submitSentence} />}
       <Player onJoinGame={joinGame} />
+      <Leaderboard />
     </AblyProvider>
   );
 }
