@@ -19,3 +19,8 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 ## Live version
 
 This project is deployed on Vercel: https://writing-challenge-game.vercel.app/
+
+## Technologies used
+
+PostgreSQL as storage for data
+Ably as messaging (pub-sub) system
