@@ -6,7 +6,7 @@ import DisplayActiveSentence from "@/components/display-active-sentence";
 import { useChannel } from "ably/react";
 import { useEffect, useRef } from "react";
 
-export default function GameLogic({ sentences }: { sentences: string[] }) {
+export default function ActiveSentenceLogic({ sentences }: { sentences: string[] }) {
   const { channel } = useChannel(
     PubSubChannels.SENTENCES,
     PubSubTopics.ACTIVE_SENTENCE,

@@ -1,6 +1,8 @@
 import { getSentences } from "@/app/actions/get-sentences";
 import { initStorageSchema } from "@/app/actions/init-storage-schema";
+import { joinGame } from "@/app/actions/join-game";
 import { seedSentences } from "@/app/actions/seed-sentences";
+import Player from "@/components/player";
 import Timer from "@/components/timer";
 import dynamic from "next/dynamic";
 
@@ -14,7 +16,7 @@ export default async function Home() {
 
   return (
     <div>
-      <GameWrapper sentences={await getSentences()}></GameWrapper>
+      <GameWrapper sentences={await getSentences()} />
       <Timer />
     </div>
   );
