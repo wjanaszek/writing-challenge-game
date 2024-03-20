@@ -11,6 +11,7 @@
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
     "@vercel/postgres": "^0.7.2",
+    "ably": "^1.2.49",
     "next": "14.1.4",
     "react": "^18",
     "react-dom": "^18"
