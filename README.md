@@ -22,5 +22,5 @@ This project is deployed on Vercel: https://writing-challenge-game.vercel.app/
 
 ## Technologies used
 
-PostgreSQL as storage for data
-Ably as messaging (pub-sub) system
+PostgreSQL as storage for data - updates are sent just for persistence (after reload)
+Ably as messaging (pub-sub) system - real-time updates
