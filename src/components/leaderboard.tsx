@@ -1,8 +1,39 @@
-import { PlayerStats } from "@/common/types";
+import { PubSubChannels } from "@/common/pub-sub";
+import { PlayerStats, PlayerStatsUpdateChunkMessage } from "@/common/types";
+import { useChannel } from "ably/react";
 import { useEffect, useState } from "react";
 
 export default function Leaderboard() {
   const [playerStats, setPlayerStats] = useState<PlayerStats[]>([]);
+  // used to listen of update stats
+  const { channel } = useChannel(
+    PubSubChannels.PLAYERS,
+    ({ data }: { data: PlayerStatsUpdateChunkMessage }) => {
+      console.log("got data", data);
+      if (!playerStats.some((player) => player.id === data.id)) {
+        setPlayerStats([...playerStats, data]);
+      }
+
+      setPlayerStats(
+        playerStats.map((player) => {
+          if (player.id !== data.id) {
+            return player;
+          }
+
+          return {
+            id: player.id,
+            name: player.name,
+            wordsPerMinute: data.wordsPerMinute,
+            accuracy: data.accuracy,
+          };
+        }),
+      );
+    },
+  );
+
+  useEffect(() => {
+    return () => channel.unsubscribe();
+  }, []);
 
   useEffect(() => {
     fetchPlayerStats();
@@ -19,13 +50,17 @@ export default function Leaderboard() {
   };
 
   return (
-    <ul className={'py-4'}>
-      {playerStats.map((stats) => (
-        <li key={stats.id}>
-          Name: {stats.name}, Words per minute: {stats.wordsPerMinute},
-          Accuracy: {stats.accuracy}
-        </li>
-      ))}
-    </ul>
+    <>
+      <h3>Leaderboard</h3>
+      <ul className={"pb-4"}>
+        {playerStats.map((stats) => (
+          <li key={stats.id} className={"py-2"}>
+            Name: {stats.name}, <br></br>
+            Words per minute: {stats.wordsPerMinute}, <br></br>
+            Accuracy: {stats.accuracy}
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }

@@ -2,19 +2,11 @@
 
 import { ACTIVE_PLAYER_STORAGE_KEY } from "@/common/constants";
 import { PubSubChannels } from "@/common/pub-sub";
-import { PlayerStats } from "@/common/types";
+import { PlayerStats, PlayerStatsUpdateChunkMessage } from "@/common/types";
 import { useChannel } from "ably/react";
 import { useEffect, useState } from "react";
 
-export default function WriteSentenceInput({
-  onSubmit,
-}: {
-  onSubmit: (
-    userId: string,
-    wordsPerMinute: number,
-    accuracy: number,
-  ) => Promise<PlayerStats>;
-}) {
+export default function WriteSentenceInput() {
   const [activeSentence, setActiveSentence] = useState<string>("");
   const [sentence, setSentence] = useState<string>("");
   const { channel } = useChannel(PubSubChannels.SENTENCES, ({ data }) => {
@@ -48,12 +40,29 @@ export default function WriteSentenceInput({
     const wordsPerMinute = 23;
     const accuracy = 16;
 
-    const playerStats = await onSubmit(
-      activePlayerData.id,
-      wordsPerMinute,
-      accuracy,
-    );
-    await channel.publish(PubSubChannels.PLAYERS, playerStats);
+    await Promise.all([
+      submitSentence(activePlayerData.id, wordsPerMinute, accuracy),
+      channel.publish(PubSubChannels.PLAYERS, {
+        id: activePlayerData.id,
+        name: activePlayerData.name,
+        wordsPerMinute,
+        accuracy,
+      } satisfies PlayerStatsUpdateChunkMessage),
+    ]);
+  };
+
+  const submitSentence = async (
+    playerId: string,
+    wordsPerMinute: number,
+    accuracy: number,
+  ): Promise<PlayerStats> => {
+    const response = await fetch("/api/sentence", {
+      method: "POST",
+      body: JSON.stringify({ playerId, wordsPerMinute, accuracy }),
+      cache: "no-store",
+    });
+
+    return response.json();
   };
 
   return (

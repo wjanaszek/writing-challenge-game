@@ -49,24 +49,10 @@ export default function GameWrapper({ sentences }: { sentences: string[] }) {
     return activePlayerData;
   };
 
-  const submitSentence = async (
-    playerId: string,
-    wordsPerMinute: number,
-    accuracy: number,
-  ): Promise<PlayerStats> => {
-    const response = await fetch("/api/sentence", {
-      method: "POST",
-      body: JSON.stringify({ playerId, wordsPerMinute, accuracy }),
-      cache: "no-store",
-    });
-
-    return response.json();
-  };
-
   return (
     <AblyProvider client={client}>
       <ActiveSentenceLogic sentences={sentences} />
-      {activePlayer && <WriteSentenceInput onSubmit={submitSentence} />}
+      {activePlayer && <WriteSentenceInput />}
       <Player onJoinGame={joinGame} />
       <Leaderboard />
       <Timer />

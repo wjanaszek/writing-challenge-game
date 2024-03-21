@@ -9,3 +9,14 @@ export type PlayerStats = {
   wordsPerMinute: number;
   accuracy: number;
 };
+
+export type PlayerStatsUpdateChunkMessage = {
+  id: string;
+  name: string;
+  wordsPerMinute: number;
+  accuracy: number;
+};
+
+export type ActiveSentenceMessage = {
+  activeSentence: string;
+}
