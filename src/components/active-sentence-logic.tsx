@@ -2,6 +2,7 @@
 
 import { ROUND_DURATION_IN_MS } from "@/common/constants";
 import { PubSubChannels } from "@/common/pub-sub";
+import { ActiveSentenceMessage } from "@/common/types";
 import DisplayActiveSentence from "@/components/display-active-sentence";
 import { useChannel } from "ably/react";
 import { useEffect, useRef } from "react";
@@ -17,12 +18,12 @@ export default function ActiveSentenceLogic({
   useEffect(() => {
     channel.publish(PubSubChannels.SENTENCES, {
       activeSentence: resolveActiveSentence(),
-    });
+    } satisfies ActiveSentenceMessage);
 
     const timer = setInterval(() => {
       channel.publish(PubSubChannels.SENTENCES, {
         activeSentence: resolveActiveSentence(),
-      });
+      } satisfies ActiveSentenceMessage);
     }, ROUND_DURATION_IN_MS);
 
     return () => clearInterval(timer);
