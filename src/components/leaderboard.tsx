@@ -9,7 +9,6 @@ export default function Leaderboard() {
   const { channel } = useChannel(
     PubSubChannels.PLAYERS,
     ({ data }: { data: PlayerStatsUpdateChunkMessage }) => {
-      console.log("got data", data);
       if (!playerStats.some((player) => player.id === data.id)) {
         setPlayerStats([...playerStats, data]);
       }
